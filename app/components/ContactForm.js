@@ -3,13 +3,17 @@ import { useState } from 'react';
 
 export default function ContactForm() {
   const [form, setForm] = useState({ naam: '', email: '', school: '', bericht: '' });
-  const [status, setStatus] = useState(null);
+  const [status, setStatus] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => 
+    setForm({ ...form, [e.target.name]: e.target.value });
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const verzenden = async () => {
+    if (!form.naam || !form.email || !form.bericht) {
+      setStatus('Vul alle verplichte velden in.');
+      return;
+    }
     setLoading(true);
     setStatus(null);
     try {
@@ -40,48 +44,28 @@ export default function ContactForm() {
   }
 
   return (
-    <form className="contact-form" onSubmit={handleSubmit}>
+    <div className="contact-form">
       <div className="form-row">
-        <input
-          type="text"
-          name="naam"
-          placeholder="Naam"
-          value={form.naam}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="E-mailadres"
-          value={form.email}
-          onChange={handleChange}
-          required
-        />
+        <input type="text" name="naam" placeholder="Naam"
+          value={form.naam} onChange={handleChange} />
+        <input type="email" name="email" placeholder="E-mailadres"
+          value={form.email} onChange={handleChange} />
       </div>
-      <input
-        type="text"
-        name="school"
-        placeholder="School / instelling"
-        value={form.school}
-        onChange={handleChange}
-      />
-      <textarea
-        name="bericht"
-        placeholder="Uw bericht of vraag"
-        value={form.bericht}
-        onChange={handleChange}
-        required
-      />
-      {status && status !== 'success' && <div className="error-msg">{status}</div>}
+      <input type="text" name="school" placeholder="School / instelling"
+        value={form.school} onChange={handleChange} />
+      <textarea name="bericht" placeholder="Uw bericht of vraag"
+        value={form.bericht} onChange={handleChange} />
+      {status && (
+        <div className="error-msg">{status}</div>
+      )}
       <button
-        type="submit"
+        onClick={verzenden}
         className="btn-primary"
-        style={{ alignSelf: 'flex-start' }}
+        style={{ alignSelf: 'flex-start', cursor: 'pointer' }}
         disabled={loading}
       >
         {loading ? 'Verzenden...' : 'Verzenden →'}
       </button>
-    </form>
+    </div>
   );
 }
