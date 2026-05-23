@@ -21,11 +21,13 @@ export async function POST(req) {
     });
 
     if (error) {
-      return Response.json({ error: error.message }, { status: 500 });
+      console.error('Resend error:', JSON.stringify(error));
+      return Response.json({ error: error.message, detail: error }, { status: 500 });
     }
 
     return Response.json({ success: true });
   } catch (err) {
-    return Response.json({ error: 'Verzenden mislukt' }, { status: 500 });
+    console.error('Catch error:', err?.message, err);
+    return Response.json({ error: err?.message || 'Verzenden mislukt' }, { status: 500 });
   }
 }
