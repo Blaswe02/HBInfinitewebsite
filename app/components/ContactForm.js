@@ -83,8 +83,9 @@ export default function ContactForm() {
       )}
       <button
         onClick={verzenden}
+        disabled={status === 'loading'}
         className="btn-primary"
-        style={{ alignSelf: 'flex-start', cursor: 'pointer' }}
+        style={{ alignSelf: 'flex-start', cursor: status === 'loading' ? 'not-allowed' : 'pointer' }}
       >
         {status === 'loading' ? 'Verzenden...' : 'Verzenden →'}
       </button>

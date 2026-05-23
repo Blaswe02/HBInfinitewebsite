@@ -8,16 +8,24 @@ export async function POST(req) {
     return Response.json({ error: 'Vul alle velden in' }, { status: 400 });
   }
 
-  await resend.emails.send({
-    from: 'onboarding@resend.dev',
-    to: ['ethelmer@gmail.com', 'dblasweiler@gmail.com'],
-    subject: `Contactformulier HB Infinite - ${naam}`,
-    html: `<h2>Nieuw bericht via website</h2>
-    <p><b>Naam:</b> ${naam}</p>
-    <p><b>Email:</b> ${email}</p>
-    <p><b>School:</b> ${school}</p>
-    <p><b>Bericht:</b> ${bericht}</p>`,
-  });
+  try {
+    const { error } = await resend.emails.send({
+      from: 'onboarding@resend.dev',
+      to: ['ethelmer@gmail.com', 'dblasweiler@gmail.com'],
+      subject: `Contactformulier HB Infinite - ${naam}`,
+      html: `<h2>Nieuw bericht via website</h2>
+      <p><b>Naam:</b> ${naam}</p>
+      <p><b>Email:</b> ${email}</p>
+      <p><b>School:</b> ${school || '–'}</p>
+      <p><b>Bericht:</b> ${bericht}</p>`,
+    });
 
-  return Response.json({ success: true });
+    if (error) {
+      return Response.json({ error: error.message }, { status: 500 });
+    }
+
+    return Response.json({ success: true });
+  } catch (err) {
+    return Response.json({ error: 'Verzenden mislukt' }, { status: 500 });
+  }
 }
