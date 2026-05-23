@@ -11,7 +11,7 @@ export async function POST(req) {
   try {
     const { error } = await resend.emails.send({
       from: 'onboarding@resend.dev',
-      to: ['ethelmer@gmail.com', 'dblasweiler@gmail.com'],
+      to: ['dblasweiler@gmail.com'],
       subject: `Contactformulier HB Infinite - ${naam}`,
       html: `<h2>Nieuw bericht via website</h2>
       <p><b>Naam:</b> ${naam}</p>
