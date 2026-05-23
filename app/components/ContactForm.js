@@ -1,70 +1,94 @@
 'use client';
+ 
 import { useState } from 'react';
-
+ 
 export default function ContactForm() {
-  const [form, setForm] = useState({ naam: '', email: '', school: '', bericht: '' });
-  const [status, setStatus] = useState(null);
-  const [loading, setLoading] = useState(false);
-
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
-
-  const verzenden = async () => {
-    if (!form.naam || !form.email || !form.bericht) {
-      setStatus('Vul alle verplichte velden in.');
+  const [naam, setNaam] = useState('');
+  const [email, setEmail] = useState('');
+  const [school, setSchool] = useState('');
+  const [bericht, setBericht] = useState('');
+  const [status, setStatus] = useState('idle'); // idle | loading | success | error
+ 
+  async function verzenden() {
+    if (!naam || !email || !bericht) {
+      setStatus('leeg');
       return;
     }
-    setLoading(true);
-    setStatus(null);
+    setStatus('loading');
     try {
       const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ naam, email, school, bericht }),
       });
       if (res.ok) {
         setStatus('success');
-        setForm({ naam: '', email: '', school: '', bericht: '' });
       } else {
-        const data = await res.json();
-        setStatus(data.error || 'Er is iets misgegaan');
+        setStatus('error');
       }
-    } catch {
-      setStatus('Er is iets misgegaan. Probeer het opnieuw.');
+    } catch (err) {
+      setStatus('error');
     }
-    setLoading(false);
-  };
-
+  }
+ 
   if (status === 'success') {
     return (
-      <div className="success-msg">
+      <div style={{
+        textAlign: 'center',
+        padding: '40px',
+        color: '#b4ff00',
+        fontSize: '1.2rem'
+      }}>
         ✓ Bericht verzonden! We nemen zo snel mogelijk contact met je op.
       </div>
     );
   }
-
+ 
   return (
     <div className="contact-form">
       <div className="form-row">
-        <input type="text" name="naam" placeholder="Naam"
-          value={form.naam} onChange={handleChange} />
-        <input type="email" name="email" placeholder="E-mailadres"
-          value={form.email} onChange={handleChange} />
+        <input
+          type="text"
+          placeholder="Naam"
+          value={naam}
+          onChange={(e) => setNaam(e.target.value)}
+        />
+        <input
+          type="email"
+          placeholder="E-mailadres"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
       </div>
-      <input type="text" name="school" placeholder="School / instelling"
-        value={form.school} onChange={handleChange} />
-      <textarea name="bericht" placeholder="Uw bericht of vraag"
-        value={form.bericht} onChange={handleChange} />
-      {status && status !== 'success' && (
-        <div className="error-msg">{status}</div>
+      <input
+        type="text"
+        placeholder="School / instelling"
+        value={school}
+        onChange={(e) => setSchool(e.target.value)}
+      />
+      <textarea
+        placeholder="Uw bericht of vraag"
+        value={bericht}
+        onChange={(e) => setBericht(e.target.value)}
+      />
+      {status === 'leeg' && (
+        <p style={{ color: '#ff6666', fontSize: '0.85rem', margin: '4px 0' }}>
+          Vul naam, e-mailadres en bericht in.
+        </p>
+      )}
+      {status === 'error' && (
+        <p style={{ color: '#ff6666', fontSize: '0.85rem', margin: '4px 0' }}>
+          Er ging iets fout. Probeer het opnieuw.
+        </p>
       )}
       <button
         onClick={verzenden}
         className="btn-primary"
         style={{ alignSelf: 'flex-start', cursor: 'pointer' }}
-        disabled={loading}
       >
-        {loading ? 'Verzenden...' : 'Verzenden →'}
+        {status === 'loading' ? 'Verzenden...' : 'Verzenden →'}
       </button>
     </div>
   );
 }
+ 
