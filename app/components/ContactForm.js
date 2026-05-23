@@ -3,11 +3,10 @@ import { useState } from 'react';
 
 export default function ContactForm() {
   const [form, setForm] = useState({ naam: '', email: '', school: '', bericht: '' });
-  const [status, setStatus] = useState<string | null>(null);
+  const [status, setStatus] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => 
-    setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
   const verzenden = async () => {
     if (!form.naam || !form.email || !form.bericht) {
@@ -55,7 +54,7 @@ export default function ContactForm() {
         value={form.school} onChange={handleChange} />
       <textarea name="bericht" placeholder="Uw bericht of vraag"
         value={form.bericht} onChange={handleChange} />
-      {status && (
+      {status && status !== 'success' && (
         <div className="error-msg">{status}</div>
       )}
       <button
