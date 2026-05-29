@@ -53,25 +53,25 @@ export default function Home() {
             <div className="card-icon">💡</div>
             <div className="card-title">AI Inspiratiesessie</div>
             <p className="card-text">Energieke sessie voor docenten en schoolleiders. Live demo&apos;s, kansen én risico&apos;s helder uitgelegd.</p>
-            <div className="card-price">Vanaf €495</div>
+            <div className="card-price">In overleg</div>
           </div>
           <div className="card">
             <div className="card-icon">📋</div>
             <div className="card-title">AI Beleidssessie</div>
             <p className="card-text">Werksessie voor schoolleiding of MT. AVG, AI Act en pedagogische dilemma&apos;s bij elkaar.</p>
-            <div className="card-price">Vanaf €1.150</div>
+            <div className="card-price">In overleg</div>
           </div>
           <div className="card">
             <div className="card-icon">📚</div>
             <div className="card-title">Lesmateriaal op Maat</div>
             <p className="card-text">Opdrachten en werkvormen rondom AI, burgerschap en mediawijsheid — op maat voor jouw school.</p>
-            <div className="card-price">Op aanvraag</div>
+            <div className="card-price">In overleg</div>
           </div>
           <div className="card">
             <div className="card-icon">🎯</div>
             <div className="card-title">AI Starttraject</div>
             <p className="card-text">Inspiratiesessie + Beleidssessie gecombineerd. Één duidelijke lijn voor team én MT.</p>
-            <div className="card-price">€1.495</div>
+            <div className="card-price">In overleg</div>
           </div>
         </div>
       </section>
