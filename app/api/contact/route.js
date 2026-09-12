@@ -3,10 +3,9 @@ const MAX_PER_WINDOW = 5;
 
 const LIMITS = { naam: 100, email: 254, school: 200, bericht: 5000 };
 
-// Ontvanger van de contactformulier-berichten. Zet om naar info@hbinfinite.nl
-// zodra hbinfinite.nl in Resend geverifieerd is; tot die tijd weigert Resend
-// elke ontvanger behalve het geverifieerde account-adres.
-const ONTVANGER = process.env.CONTACT_TO || 'dblasweiler@gmail.com';
+// Verzendt vanaf het eigen, in Resend geverifieerde domein.
+const AFZENDER = process.env.CONTACT_FROM || 'HB Infinite <contact@hbinfinite.nl>';
+const ONTVANGER = process.env.CONTACT_TO || 'info@hbinfinite.nl';
 
 // Best-effort geheugenteller per instantie. Zie SECURITY.md voor de beperking.
 const hits = new Map();
@@ -94,7 +93,7 @@ export async function POST(req) {
     const resend = new Resend(process.env.RESEND_API_KEY);
 
     const { error } = await resend.emails.send({
-      from: 'onboarding@resend.dev',
+      from: AFZENDER,
       replyTo: email,
       to: [ONTVANGER],
       subject: `Contactformulier HB Infinite - ${escapeHtml(naam)}`,
