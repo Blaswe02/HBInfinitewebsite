@@ -5,6 +5,17 @@
   "installCommand": "npm install",
   "redirects": [
     {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "hbinfinite.nl"
+        }
+      ],
+      "destination": "https://www.hbinfinite.nl/",
+      "permanent": true
+    },
+    {
       "source": "/:path*",
       "has": [
         {
