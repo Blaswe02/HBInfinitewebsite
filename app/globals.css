@@ -9,9 +9,12 @@
   --dark: #040810;
   --dark2: #080f1a;
   --card: rgba(0,245,255,0.05);
+  --violet: #a24bff;
+  --blue: #2b6dff;
 }
 
 html { scroll-behavior: smooth; }
+body { overflow-x: hidden; }
 
 body {
   background: var(--dark);
@@ -86,79 +89,251 @@ nav {
   position: relative;
   min-height: 100vh;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 120px 24px 80px;
+  padding: 120px 48px 80px;
+  overflow: hidden;
   z-index: 1;
 }
 
-.logo-container {
+/* --- sfeer achter de hero --- */
+.aurora {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(80px);
+}
+.aurora-a {
+  width: 1200px; height: 1200px;
+  left: 34%; top: -52%;
+  background: radial-gradient(ellipse at center, rgba(162,75,255,0.42) 0%, rgba(43,109,255,0.16) 45%, rgba(4,8,16,0) 70%);
+  animation: sweep 24s ease-in-out infinite;
+}
+.aurora-b {
+  width: 820px; height: 820px;
+  left: -18%; bottom: -42%;
+  background: radial-gradient(circle, rgba(0,245,255,0.24) 0%, rgba(4,8,16,0) 65%);
+  animation: sweep 30s ease-in-out infinite reverse;
+}
+.beam {
+  position: absolute;
+  right: 12%; top: -10%;
+  width: 380px; height: 120%;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(162,75,255,0) 0%, rgba(162,75,255,0.22) 32%, rgba(0,245,255,0.14) 66%, rgba(4,8,16,0) 100%);
+  filter: blur(42px);
+  animation: beam 9s ease-in-out infinite;
+}
+.hero-waves {
+  position: absolute;
+  right: 0; top: 0; bottom: 0;
+  width: 620px;
+  overflow: hidden;
+  opacity: 0.5;
+  pointer-events: none;
+}
+.hero-waves svg {
+  position: absolute;
+  top: 0; right: 0;
+  animation: waveUp 19s linear infinite;
+}
+@keyframes sweep {
+  0%   { transform: translate(0, 0) rotate(0deg) scale(1); }
+  50%  { transform: translate(-90px, 70px) rotate(8deg) scale(1.15); }
+  100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+}
+@keyframes beam {
+  0%, 100% { opacity: 0.28; }
+  50%      { opacity: 0.62; }
+}
+@keyframes waveUp {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-880px); }
+}
+
+/* --- zwevende deeltjes --- */
+.particles { position: absolute; inset: 0; pointer-events: none; }
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  animation-name: drift;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+@keyframes drift {
+  0%   { transform: translate(0, 0) scale(1); }
+  33%  { transform: translate(18px, -26px) scale(1.25); }
+  66%  { transform: translate(-14px, -48px) scale(0.85); }
+  100% { transform: translate(0, 0) scale(1); }
+}
+
+/* --- indeling: tekst links, logo rechts --- */
+.hero-grid {
   position: relative;
-  margin-bottom: 40px;
-  animation: logoIn 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  opacity: 0;
-  transform: translateY(20px);
+  z-index: 2;
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: center;
+  gap: 48px;
 }
 
-@keyframes logoIn {
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.logo-img {
-  width: 260px;
-  height: 260px;
-  object-fit: contain;
-  filter: drop-shadow(0 0 24px rgba(0,245,255,0.45)) drop-shadow(0 0 50px rgba(180,255,0,0.15));
-}
-
+.hero-eyebrow-row { display: flex; align-items: center; gap: 14px; margin-bottom: 22px; }
+.hero-rule { width: 46px; height: 1px; background: var(--green); }
 .hero-eyebrow {
   font-family: 'Orbitron', sans-serif;
-  font-size: 0.68rem;
+  font-size: 0.66rem;
   letter-spacing: 5px;
   color: var(--green);
   text-transform: uppercase;
-  margin-bottom: 14px;
-  animation: fadeUp 0.7s 0.3s both;
 }
 
 .hero-title {
   font-family: 'Orbitron', sans-serif;
-  font-size: clamp(2rem, 4.5vw, 3.6rem);
+  font-size: clamp(2.1rem, 4.4vw, 3.7rem);
   font-weight: 900;
-  line-height: 1.1;
-  margin-bottom: 18px;
-  animation: fadeUp 0.7s 0.5s both;
+  line-height: 1.04;
+  margin-bottom: 26px;
+  text-wrap: balance;
 }
-
 .hero-title span {
-  background: linear-gradient(135deg, var(--cyan), var(--green));
+  background: linear-gradient(120deg, var(--violet), var(--cyan) 65%, var(--green));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .hero-sub {
-  font-size: 1rem;
-  color: rgba(224,240,255,0.6);
-  max-width: 520px;
-  line-height: 1.75;
-  margin-bottom: 44px;
-  animation: fadeUp 0.7s 0.7s both;
+  font-size: 1.05rem;
+  color: rgba(224,240,255,0.66);
+  line-height: 1.8;
+  margin-bottom: 40px;
+  max-width: 460px;
 }
 
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(18px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+.hero-btns { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
 
-.hero-btns {
+.btn-link {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.75rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(224,240,255,0.65);
+  border-bottom: 1px solid rgba(0,245,255,0.35);
+  padding-bottom: 4px;
+  text-decoration: none;
+  transition: color 0.2s, border-color 0.2s;
+}
+.btn-link:hover { color: var(--cyan); border-color: var(--cyan); }
+
+.hero-stats {
   display: flex;
-  gap: 16px;
+  gap: 40px;
+  margin-top: 64px;
+  padding-top: 28px;
+  border-top: 1px solid rgba(0,245,255,0.12);
   flex-wrap: wrap;
-  justify-content: center;
-  animation: fadeUp 0.7s 0.9s both;
+}
+.hero-stat-num {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--cyan);
+}
+.hero-stat-label {
+  font-size: 0.66rem;
+  letter-spacing: 1.5px;
+  color: rgba(224,240,255,0.4);
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+/* --- het logo met de losgesneden bolletjes --- */
+.hero-art { display: flex; align-items: center; justify-content: center; }
+
+.logo-stage {
+  position: relative;
+  width: min(520px, 100%);
+  aspect-ratio: 1 / 1;
+}
+.logo-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 0 30px rgba(0,245,255,0.45)) drop-shadow(0 0 90px rgba(162,75,255,0.55));
+}
+
+/* De baan is even groot als het logo, zodat de verplaatsing in procenten
+   meeschaalt met het logo. Het bolletje zelf pulseert apart. */
+.orb-track {
+  position: absolute;
+  inset: 0;
+  display: block;
+  pointer-events: none;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+.orb-dot {
+  position: absolute;
+  height: auto;
+  animation-name: orbPulse;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+@keyframes orbPulse {
+  0%, 100% { transform: scale(1);    opacity: 0.9; }
+  50%      { transform: scale(1.22); opacity: 1; }
+}
+@keyframes f1 {
+  0%, 100% { transform: translate(0, 0); }
+  25%  { transform: translate(5.9%, -7.3%); }
+  50%  { transform: translate(-4.5%, -12.7%); }
+  75%  { transform: translate(-8.6%, -3.6%); }
+}
+@keyframes f2 {
+  0%, 100% { transform: translate(0, 0); }
+  25%  { transform: translate(-6.8%, -5%); }
+  50%  { transform: translate(-2.7%, -11.4%); }
+  75%  { transform: translate(6.4%, -6.8%); }
+}
+@keyframes f3 {
+  0%, 100% { transform: translate(0, 0); }
+  25%  { transform: translate(7.7%, 4.1%); }
+  50%  { transform: translate(3.2%, 11.8%); }
+  75%  { transform: translate(-5.9%, 6.4%); }
+}
+@keyframes f4 {
+  0%, 100% { transform: translate(0, 0); }
+  25%  { transform: translate(-5%, 6.8%); }
+  50%  { transform: translate(4.1%, 10.5%); }
+  75%  { transform: translate(9.1%, 2.3%); }
+}
+@keyframes f5 {
+  0%, 100% { transform: translate(0, 0); }
+  25%  { transform: translate(4.1%, -9.1%); }
+  50%  { transform: translate(10%, -2.7%); }
+  75%  { transform: translate(4.5%, 5.9%); }
+}
+@keyframes f6 {
+  0%, 100% { transform: translate(0, 0); }
+  25%  { transform: translate(-9.1%, -2.3%); }
+  50%  { transform: translate(-5.5%, 5.9%); }
+  75%  { transform: translate(3.6%, 8.6%); }
+}
+@keyframes f7 {
+  0%, 100% { transform: translate(0, 0); }
+  25%  { transform: translate(6.8%, 6.8%); }
+  50%  { transform: translate(-3.6%, 10%); }
+  75%  { transform: translate(-8.2%, 1.8%); }
+}
+@keyframes f8 {
+  0%, 100% { transform: translate(0, 0); }
+  25%  { transform: translate(-3.6%, -10%); }
+  50%  { transform: translate(5.5%, -7.7%); }
+  75%  { transform: translate(8.6%, -0.9%); }
 }
 
 .btn-primary {
@@ -238,6 +413,7 @@ nav {
   padding: 90px 48px;
   max-width: 1200px;
   margin: 0 auto;
+  overflow: hidden;
 }
 
 .section-label {
@@ -282,7 +458,7 @@ nav {
 .card:hover { border-color: rgba(0,245,255,0.28); transform: translateY(-3px); }
 .card:hover::before { opacity: 1; }
 
-.card-icon { font-size: 1.8rem; margin-bottom: 18px; }
+.card-icon { margin-bottom: 18px; color: var(--cyan); line-height: 0; }
 .card-title {
   font-family: 'Orbitron', sans-serif;
   font-size: 0.88rem;
@@ -375,3 +551,107 @@ footer {
   color: var(--cyan);
 }
 .footer-copy { font-size: 0.72rem; color: rgba(224,240,255,0.3); }
+
+/* ---- Kaartvarianten: elke dienst een eigen tint ---- */
+.card { border-radius: 2px; }
+.card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+}
+.card-violet { background: linear-gradient(160deg, rgba(162,75,255,0.10), rgba(0,245,255,0.03)); border-color: rgba(162,75,255,0.26); }
+.card-violet::after { background: linear-gradient(90deg, var(--violet), var(--cyan)); }
+.card-violet:hover { border-color: rgba(162,75,255,0.5); }
+
+.card-blue { background: linear-gradient(160deg, rgba(43,109,255,0.10), rgba(0,245,255,0.03)); border-color: rgba(43,109,255,0.28); }
+.card-blue::after { background: linear-gradient(90deg, var(--blue), var(--cyan)); }
+.card-blue:hover { border-color: rgba(43,109,255,0.52); }
+
+.card-cyan { background: linear-gradient(160deg, rgba(0,245,255,0.09), rgba(162,75,255,0.03)); border-color: rgba(0,245,255,0.26); }
+.card-cyan::after { background: linear-gradient(90deg, var(--cyan), var(--green)); }
+
+.card-green { background: linear-gradient(160deg, rgba(180,255,0,0.07), rgba(0,245,255,0.03)); border-color: rgba(180,255,0,0.22); }
+.card-green::after { background: linear-gradient(90deg, var(--green), var(--cyan)); }
+.card-green:hover { border-color: rgba(180,255,0,0.45); }
+
+/* ---- Gloed achter de dienstensectie ---- */
+.section-glow {
+  position: absolute;
+  width: 640px; height: 640px;
+  right: -220px; top: 40px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--violet) 0%, rgba(162,75,255,0) 62%);
+  opacity: 0.13;
+  filter: blur(90px);
+  pointer-events: none;
+  animation: sweep 30s ease-in-out infinite;
+}
+
+/* ---- Golf boven het contactblok ---- */
+.contact-section { overflow: hidden; }
+.contact-wave {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 140px;
+  overflow: hidden;
+  opacity: 0.55;
+  pointer-events: none;
+}
+.contact-wave svg {
+  position: absolute;
+  top: 0; left: 0;
+  animation: waveSlide 21s linear infinite;
+}
+@keyframes waveSlide {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-1440px); }
+}
+.contact-inner { position: relative; z-index: 1; padding-top: 40px; }
+
+/* ---- Kleinere schermen ---- */
+@media (max-width: 900px) {
+  .hero { padding: 110px 24px 70px; min-height: auto; }
+  .hero-grid { grid-template-columns: 1fr; gap: 8px; text-align: center; }
+  .hero-art { order: -1; }
+  .logo-stage { width: min(380px, 82vw); }
+  .hero-eyebrow-row { justify-content: center; }
+  .hero-sub { margin-left: auto; margin-right: auto; }
+  .hero-btns { justify-content: center; }
+  .hero-stats { justify-content: center; gap: 28px; margin-top: 44px; }
+  .hero-waves { width: 100%; opacity: 0.32; }
+  .beam { right: 50%; transform: translateX(50%); }
+}
+
+/* De navigatie liep op telefoons buiten beeld: links waren onbereikbaar.
+   Hij stapelt nu in twee rijen in plaats van af te kappen. */
+@media (max-width: 760px) {
+  nav {
+    flex-direction: column;
+    gap: 10px;
+    padding: 12px 18px;
+  }
+  .nav-links {
+    gap: 18px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .nav-links a { font-size: 0.72rem; letter-spacing: 1px; }
+  .hero { padding-top: 132px; }
+}
+
+@media (max-width: 560px) {
+  .hero-btns { flex-direction: column; align-items: stretch; }
+  .hero-btns .btn-primary { text-align: center; }
+  .btn-link { text-align: center; padding-top: 8px; }
+  .stats-bar { flex-wrap: wrap; }
+  .stat { flex: 1 1 50%; max-width: none; }
+}
+
+/* ---- Respecteer de systeeminstelling voor minder beweging ---- */
+@media (prefers-reduced-motion: reduce) {
+  .particle, .orb-track, .orb-dot, .aurora, .beam,
+  .hero-waves svg, .contact-wave svg, .section-glow {
+    animation: none !important;
+  }
+}
