@@ -7,6 +7,7 @@ export default function ContactForm() {
   const [email, setEmail] = useState('');
   const [school, setSchool] = useState('');
   const [bericht, setBericht] = useState('');
+  const [website, setWebsite] = useState(''); // honeypot, blijft leeg bij echte bezoekers
   const [status, setStatus] = useState('idle'); // idle | loading | success | error
  
   async function verzenden() {
@@ -19,10 +20,12 @@ export default function ContactForm() {
       const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ naam, email, school, bericht }),
+        body: JSON.stringify({ naam, email, school, bericht, website }),
       });
       if (res.ok) {
         setStatus('success');
+      } else if (res.status === 429) {
+        setStatus('limiet');
       } else {
         setStatus('error');
       }
@@ -71,6 +74,21 @@ export default function ContactForm() {
         value={bericht}
         onChange={(e) => setBericht(e.target.value)}
       />
+      <input
+        type="text"
+        name="website"
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+        value={website}
+        onChange={(e) => setWebsite(e.target.value)}
+        style={{ position: 'absolute', left: '-9999px', width: '1px', height: '1px', opacity: 0 }}
+      />
+      {status === 'limiet' && (
+        <p style={{ color: '#ff6666', fontSize: '0.85rem', margin: '4px 0' }}>
+          Je hebt net al een aantal berichten verstuurd. Probeer het over een uur opnieuw.
+        </p>
+      )}
       {status === 'leeg' && (
         <p style={{ color: '#ff6666', fontSize: '0.85rem', margin: '4px 0' }}>
           Vul naam, e-mailadres en bericht in.
