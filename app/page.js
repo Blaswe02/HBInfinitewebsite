@@ -88,7 +88,11 @@ export default function Home() {
 
       <footer>
         <div className="footer-brand">HB INFINITE</div>
-        <div className="footer-copy">© 2026 HB Infinite. Alle rechten voorbehouden.</div>
+        <div className="footer-copy">
+          <a href="/privacy">Privacyverklaring</a>
+          <span className="footer-sep">·</span>
+          © 2026 HB Infinite. Alle rechten voorbehouden.
+        </div>
       </footer>
     </>
   );
