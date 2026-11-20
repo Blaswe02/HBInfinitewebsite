@@ -23,10 +23,6 @@ jobs:
         with:
           node-version: "22"
           cache: npm
-      - name: Regenerate lockfile for Resend upgrade
-        run: |
-          npm install --package-lock-only --ignore-scripts
-          node -e "console.log('LOCKFILE_JSON:' + JSON.stringify(require('./package-lock.json')))"
       - name: Install reproducible dependencies
         run: npm ci
       - name: Build production application
