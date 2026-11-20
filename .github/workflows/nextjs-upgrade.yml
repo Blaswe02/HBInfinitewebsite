@@ -1,0 +1,32 @@
+name: Next.js upgrade validation
+on:
+  push:
+    branches: [codex/nextjs-security-upgrade]
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      NEXT_TELEMETRY_DISABLED: "1"
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: "22"
+      - name: Resolve upgrade lockfile
+        run: npm install --package-lock-only --ignore-scripts
+      - name: Export resolved dependency manifest
+        run: |
+          node -e "const fs=require('fs');console.log('UPGRADE_LOCK_BASE64:'+fs.readFileSync('package-lock.json').toString('base64'));console.log('RESOLVED_VERSIONS:'+JSON.stringify(Object.fromEntries(['next','react','react-dom','resend'].map(n=>[n,JSON.parse(fs.readFileSync('package-lock.json')).packages['node_modules/'+n].version]))));"
+      - name: Install reproducible dependencies
+        run: npm ci
+      - name: Build production application
+        run: npm run build
+      - name: Audit production dependencies
+        run: npm audit --omit=dev --audit-level=high
