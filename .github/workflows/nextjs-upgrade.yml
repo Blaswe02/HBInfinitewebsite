@@ -29,5 +29,7 @@ jobs:
         run: npm run build
       - name: Smoke test production server
         run: npm run test:smoke
+      - name: Test Resend SDK contract without sending email
+        run: node scripts/contact-sdk-test.mjs
       - name: Audit production dependencies
-        run: npm audit --omit=dev --audit-level=high
+        run: npm audit --omit=dev --audit-level=low
