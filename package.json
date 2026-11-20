@@ -5,12 +5,13 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "test:smoke": "node scripts/smoke-test.mjs"
   },
   "dependencies": {
     "next": "16.4.6",
     "react": "19.3.1",
-    "react-dom": "latest",
+    "react-dom": "19.3.1",
     "resend": "^3.2.0"
   },
   "engines": {

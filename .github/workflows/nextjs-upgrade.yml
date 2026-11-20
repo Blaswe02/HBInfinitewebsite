@@ -1,11 +1,14 @@
-name: Next.js upgrade validation
+name: Next.js production validation
 on:
   push:
-    branches: [codex/nextjs-security-upgrade]
+    branches: [main]
   pull_request:
     branches: [main]
 permissions:
   contents: read
+concurrency:
+  group: nextjs-validation-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   validate:
     runs-on: ubuntu-latest
@@ -19,14 +22,12 @@ jobs:
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: "22"
-      - name: Resolve upgrade lockfile
-        run: npm install --package-lock-only --ignore-scripts next@16.4.6 react@19.3.1 react-dom@latest
-      - name: Export resolved dependency manifest
-        run: |
-          node -e "const fs=require('fs');console.log('UPGRADE_LOCK_BASE64:'+fs.readFileSync('package-lock.json').toString('base64'));console.log('RESOLVED_VERSIONS:'+JSON.stringify(Object.fromEntries(['next','react','react-dom','resend'].map(n=>[n,JSON.parse(fs.readFileSync('package-lock.json')).packages['node_modules/'+n].version]))));"
+          cache: npm
       - name: Install reproducible dependencies
         run: npm ci
       - name: Build production application
         run: npm run build
+      - name: Smoke test production server
+        run: npm run test:smoke
       - name: Audit production dependencies
         run: npm audit --omit=dev --audit-level=high
