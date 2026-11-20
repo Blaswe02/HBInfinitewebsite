@@ -23,11 +23,17 @@ jobs:
         with:
           node-version: "22"
           cache: npm
+      - name: Regenerate lockfile for Resend upgrade
+        run: |
+          npm install --package-lock-only --ignore-scripts
+          node -e "console.log('LOCKFILE_JSON:' + JSON.stringify(require('./package-lock.json')))"
       - name: Install reproducible dependencies
         run: npm ci
       - name: Build production application
         run: npm run build
       - name: Smoke test production server
         run: npm run test:smoke
+      - name: Test Resend SDK contract without sending email
+        run: node scripts/contact-sdk-test.mjs
       - name: Audit production dependencies
-        run: npm audit --omit=dev --audit-level=high
+        run: npm audit --omit=dev --audit-level=low
