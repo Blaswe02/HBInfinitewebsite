@@ -20,7 +20,7 @@ jobs:
         with:
           node-version: "22"
       - name: Resolve upgrade lockfile
-        run: npm install --package-lock-only --ignore-scripts
+        run: npm install --package-lock-only --ignore-scripts next@16.4.6 react@19.3.1 react-dom@latest
       - name: Export resolved dependency manifest
         run: |
           node -e "const fs=require('fs');console.log('UPGRADE_LOCK_BASE64:'+fs.readFileSync('package-lock.json').toString('base64'));console.log('RESOLVED_VERSIONS:'+JSON.stringify(Object.fromEntries(['next','react','react-dom','resend'].map(n=>[n,JSON.parse(fs.readFileSync('package-lock.json')).packages['node_modules/'+n].version]))));"
